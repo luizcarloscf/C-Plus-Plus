@@ -76,8 +76,8 @@ void unzip(const std::vector<std::pair<C, D>>& zipped, std::vector<C>& a,
 template <typename A, typename B>
 class DecisionTree {
  private:
-    double impurity;        ///< Dataset impurity
-    int samples;            ///< Number of dataset samples
+    double impurity{0};     ///< Dataset impurity
+    int samples{0};         ///< Number of dataset samples
     int min_samples_split;  ///< Minimum number of samples required to split
     int max_depth;          ///< The maximum depth of the tree
     B prediction;           ///< Most frequent label of dataset
@@ -147,8 +147,9 @@ class DecisionTree {
      */
     double get_impurity(const std::vector<B>& y) {
         double impurity = 1.0;
-        if (y.size() == 0)
+        if (y.size() == 0) {
             return 0.0;
+        }
         std::unordered_map<B, double> frequency;
         for (auto i : y) {
             ++frequency[i];
@@ -169,8 +170,7 @@ class DecisionTree {
           min_samples_split(min_samples_split),
           left(nullptr),
           right(nullptr),
-          impurity(0),
-          samples(0),
+
           prediction(0){};
 
     /**
@@ -240,7 +240,7 @@ class DecisionTree {
             for (std::size_t j = 1; j < Y.size(); j++) {
                 auto value_before = X[j - 1][i];
                 auto value = X[j][i];
-                double split_value = static_cast<double>(value - value_before);
+                auto split_value = static_cast<double>(value - value_before);
                 split_value = (split_value / 2) + value_before;
                 auto result = this->split(X, Y, i, split_value);
                 auto x_left_ = std::get<0>(result);
