@@ -71,15 +71,15 @@ void unzip(const std::vector<std::pair<A, B>>& zipped, std::vector<A>& a,
  */
 class DecisionTree {
  private:
-    double impurity{};      ///< Dataset impurity
-    int samples{};          ///< Number of dataset samples
+    double impurity;        ///< Dataset impurity
+    int samples;            ///< Number of dataset samples
     int min_samples_split;  ///< Minimum number of samples required to split
     int max_depth;          ///< The maximum depth of the tree
-    int prediction{};       ///< Most frequent label of dataset
+    int prediction;         ///< Most frequent label of dataset
     DecisionTree* left;     ///< Pointer to node on left
     DecisionTree* right;    ///< Pointer to node on right
     std::pair<std::size_t, double>
-        best_choice{};  ///< Best attribute and value to split
+        best_choice;  ///< Best attribute and value to split
 
     /**
      * @brief Find most frequent item in vector
@@ -292,7 +292,7 @@ class DecisionTree {
      */
     template <typename T>
     int predict(std::vector<T> x) {
-        if ((this->left == nullptr) && (this->right == nullptr)) {
+        if ((this->left == nullptr) || (this->right == nullptr)) {
             return this->prediction;
         } else {
             if (x[this->best_choice.first] < this->best_choice.second) {
@@ -331,7 +331,8 @@ class DecisionTree {
  */
 static void test() {
     auto model1 = machine_learning::decision_tree::DecisionTree(5, 4);
-    std::vector<std::vector<double>> X1 = {{0}, {0}, {1}, {1}, {2}, {2}, {3}, {3}};
+    std::vector<std::vector<double>> X1 = {{0}, {0}, {1}, {1},
+                                           {2}, {2}, {3}, {3}};
     std::vector<size_t> Y1 = {2, 2, 2, 2, 3, 3, 3, 3};
     model1.train(X1, Y1);
 
